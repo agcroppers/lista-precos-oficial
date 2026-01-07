@@ -768,133 +768,217 @@
   </script>
 
   <!-- Firebase Auth gate (login obrigatório antes de renderizar a lista) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      signInWithEmailAndPassword,
-      createUserWithEmailAndPassword,
-      sendPasswordResetEmail,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyARpM8n6c12Al6YgPxD_GOuAmLs6U2y4us",
-      authDomain: "ag-croppers.firebaseapp.com",
-      projectId: "ag-croppers",
-      storageBucket: "ag-croppers.firebasestorage.app",
-      messagingSenderId: "1009802908012",
-      appId: "1:1009802908012:web:c1ff8ec5ff65d16e4b2349",
-      measurementId: "G-JC9RK9KYTY"
-    };
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-    const fbApp = initializeApp(firebaseConfig);
-    const auth = getAuth(fbApp);
+  const firebaseConfig = {
+    apiKey: "AIzaSyARpM8n6c12Al6YgPxD_GOuAmLs6U2y4us",
+    authDomain: "ag-croppers.firebaseapp.com",
+    projectId: "ag-croppers",
+    storageBucket: "ag-croppers.firebasestorage.app",
+    messagingSenderId: "1009802908012",
+    appId: "1:1009802908012:web:c1ff8ec5ff65d16e4b2349",
+    measurementId: "G-JC9RK9KYTY"
+  };
 
-    const root = document.getElementById("app");
+  const fbApp = initializeApp(firebaseConfig);
+  const auth = getAuth(fbApp);
+  const db = getFirestore(fbApp);
 
-    // Exposto para UI (mostrar e-mail + botão Sair)
-    window.__currentUserEmail = "";
-    window.__signOut = async () => {
-      await signOut(auth);
-    };
+  const root = document.getElementById("app");
 
-    function mapAuthError(err){
-      const code = err?.code || "";
-      if (code.includes("invalid") || code.includes("wrong-password")) return "E-mail ou senha inválidos.";
-      if (code.includes("user-not-found")) return "Usuário não encontrado.";
-      if (code.includes("email-already-in-use")) return "Este e-mail já está em uso.";
-      if (code.includes("weak-password")) return "Senha fraca. Use pelo menos 6 caracteres.";
-      if (code.includes("too-many-requests")) return "Muitas tentativas. Aguarde e tente novamente.";
-      if (code.includes("network-request-failed")) return "Falha de rede. Verifique sua conexão e tente novamente.";
-      return "Não foi possível autenticar. Verifique os dados e tente novamente.";
-    }
+  // Exposto para UI (mostrar e-mail + botão Sair)
+  window.__currentUserEmail = "";
+  window.__signOut = async () => {
+    await signOut(auth);
+  };
 
-    function renderLogin(errorText = ""){
-      root.innerHTML = `
-        <section class="chooser">
-          <div class="chooserCard">
-            <div class="chooserTop">
-              <h2>Acesso restrito</h2>
-              <p>Faça login para visualizar a Lista de Preços Oficiais.</p>
-            </div>
+  function mapAuthError(err){
+    const code = err?.code || "";
+    if (code.includes("invalid") || code.includes("wrong-password")) return "E-mail ou senha inválidos.";
+    if (code.includes("user-not-found")) return "Usuário não encontrado.";
+    if (code.includes("email-already-in-use")) return "Este e-mail já está em uso.";
+    if (code.includes("weak-password")) return "Senha fraca. Use pelo menos 6 caracteres.";
+    if (code.includes("too-many-requests")) return "Muitas tentativas. Aguarde e tente novamente.";
+    if (code.includes("network-request-failed")) return "Falha de rede. Verifique sua conexão e tente novamente.";
+    return "Não foi possível autenticar. Verifique os dados e tente novamente.";
+  }
 
-            <div class="authForm">
-              <div class="authRow">
-                <div class="authField">
-                  <label for="authEmail">E-mail</label>
-                  <input id="authEmail" type="email" placeholder="seuemail@empresa.com" autocomplete="email" />
-                </div>
-                <div class="authField">
-                  <label for="authPass">Senha</label>
-                  <input id="authPass" type="password" placeholder="••••••••" autocomplete="current-password" />
-                </div>
-              </div>
-
-              <div class="authActions">
-                <button class="authBtn primary" id="btnLogin" type="button">Entrar</button>
-                <button class="authBtn" id="btnSignup" type="button">Criar conta</button>
-                <button class="linkBtn" id="btnReset" type="button">Esqueci minha senha</button>
-              </div>
-
-              ${errorText
-                ? `<div class="authError">${errorText}</div>`
-                : `<div class="authMsg">Se ainda não tiver acesso, crie uma conta. (O admin pode gerenciar usuários no Firebase → Authentication → Users.)</div>`
-              }
-            </div>
+  function renderPending(email){
+    root.innerHTML = `
+      <section class="chooser">
+        <div class="chooserCard">
+          <div class="chooserTop">
+            <h2>Aguardando aprovação</h2>
+            <p>Seu acesso foi criado, mas ainda não foi aprovado pelo administrador.</p>
+            <p style="margin-top:8px"><strong>${email ? email : ""}</strong></p>
           </div>
-        </section>
-      `;
 
-      const emailEl = document.getElementById("authEmail");
-      const passEl  = document.getElementById("authPass");
+          <div class="authActions">
+            <button class="authBtn" id="btnExit" type="button">Sair</button>
+          </div>
 
-      document.getElementById("btnLogin").addEventListener("click", async () => {
-        const email = (emailEl.value || "").trim();
-        const pass  = (passEl.value || "").trim();
-        try{
-          await signInWithEmailAndPassword(auth, email, pass);
-        }catch(e){
-          renderLogin(mapAuthError(e));
-        }
-      });
+          <div class="authMsg">
+            Se precisar de urgência, solicite a liberação ao administrador.
+          </div>
+        </div>
+      </section>
+    `;
 
-      document.getElementById("btnSignup").addEventListener("click", async () => {
-        const email = (emailEl.value || "").trim();
-        const pass  = (passEl.value || "").trim();
-        try{
-          await createUserWithEmailAndPassword(auth, email, pass);
-        }catch(e){
-          renderLogin(mapAuthError(e));
-        }
-      });
+    document.getElementById("btnExit").addEventListener("click", async () => {
+      await signOut(auth);
+    });
+  }
 
-      document.getElementById("btnReset").addEventListener("click", async () => {
-        const email = (emailEl.value || "").trim();
-        if (!email){
-          renderLogin("Informe o e-mail para enviar o link de redefinição.");
-          return;
-        }
-        try{
-          await sendPasswordResetEmail(auth, email);
-          renderLogin("Link de redefinição enviado. Verifique seu e-mail.");
-        }catch(e){
-          renderLogin(mapAuthError(e));
-        }
-      });
-    }
+  function renderLogin(errorText = ""){
+    root.innerHTML = `
+      <section class="chooser">
+        <div class="chooserCard">
+          <div class="chooserTop">
+            <h2>Acesso restrito</h2>
+            <p>Faça login para visualizar a Lista de Preços Oficiais.</p>
+          </div>
 
-    // Gate: só libera a lista após autenticação
-    onAuthStateChanged(auth, (user) => {
-      if (user){
-        window.__currentUserEmail = user.email || "";
-        window.__bootPricesApp?.();
-      }else{
-        window.__currentUserEmail = "";
-        renderLogin();
+          <div class="authForm">
+            <div class="authRow">
+              <div class="authField">
+                <label for="authEmail">E-mail</label>
+                <input id="authEmail" type="email" placeholder="seuemail@empresa.com" autocomplete="email" />
+              </div>
+              <div class="authField">
+                <label for="authPass">Senha</label>
+                <input id="authPass" type="password" placeholder="••••••••" autocomplete="current-password" />
+              </div>
+            </div>
+
+            <div class="authActions">
+              <button class="authBtn primary" id="btnLogin" type="button">Entrar</button>
+              <button class="authBtn" id="btnSignup" type="button">Criar conta</button>
+              <button class="linkBtn" id="btnReset" type="button">Esqueci minha senha</button>
+            </div>
+
+            ${errorText
+              ? `<div class="authError">${errorText}</div>`
+              : `<div class="authMsg">Se ainda não tiver acesso, crie uma conta. Ela ficará pendente até aprovação do admin.</div>`
+            }
+          </div>
+        </div>
+      </section>
+    `;
+
+    const emailEl = document.getElementById("authEmail");
+    const passEl  = document.getElementById("authPass");
+
+    document.getElementById("btnLogin").addEventListener("click", async () => {
+      const email = (emailEl.value || "").trim();
+      const pass  = (passEl.value || "").trim();
+      try{
+        await signInWithEmailAndPassword(auth, email, pass);
+        // A liberação acontece no onAuthStateChanged (checa active)
+      }catch(e){
+        renderLogin(mapAuthError(e));
       }
     });
-  </script>
+
+    document.getElementById("btnSignup").addEventListener("click", async () => {
+      const email = (emailEl.value || "").trim();
+      const pass  = (passEl.value || "").trim();
+      try{
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+        // Cria o cadastro do usuário como PENDENTE
+        await setDoc(doc(db, "users", cred.user.uid), {
+          email,
+          active: false,
+          role: "user",
+          createdAt: serverTimestamp()
+        }, { merge: true });
+
+        // Mostra pendente e (opcional) desloga na sequência
+        renderPending(email);
+        await signOut(auth);
+
+      }catch(e){
+        renderLogin(mapAuthError(e));
+      }
+    });
+
+    document.getElementById("btnReset").addEventListener("click", async () => {
+      const email = (emailEl.value || "").trim();
+      if (!email){
+        renderLogin("Informe o e-mail para enviar o link de redefinição.");
+        return;
+      }
+      try{
+        await sendPasswordResetEmail(auth, email);
+        renderLogin("Link de redefinição enviado. Verifique seu e-mail.");
+      }catch(e){
+        renderLogin(mapAuthError(e));
+      }
+    });
+  }
+
+  async function ensureUserDoc(user){
+    const ref = doc(db, "users", user.uid);
+    const snap = await getDoc(ref);
+    if (!snap.exists()){
+      // Se o usuário já existia no Auth mas não tem doc ainda, cria como pendente
+      await setDoc(ref, {
+        email: user.email || "",
+        active: false,
+        role: "user",
+        createdAt: serverTimestamp()
+      }, { merge: true });
+      return { active: false, role: "user" };
+    }
+    return snap.data() || {};
+  }
+
+  // Gate: só libera a lista após autenticação + aprovação
+  onAuthStateChanged(auth, async (user) => {
+    if (!user){
+      window.__currentUserEmail = "";
+      renderLogin();
+      return;
+    }
+
+    try{
+      const data = await ensureUserDoc(user);
+      const isActive = data?.active === true;
+
+      if (!isActive){
+        const email = user.email || "";
+        renderPending(email);
+        // opcional: deixar logado e apenas bloquear. Eu recomendo deslogar:
+        await signOut(auth);
+        return;
+      }
+
+      window.__currentUserEmail = user.email || "";
+      window.__bootPricesApp?.();
+
+    }catch(e){
+      // Falha ao validar status → não libera
+      renderLogin("Não foi possível validar seu acesso. Tente novamente.");
+      await signOut(auth);
+    }
+  });
+</script>
 </body>
 </html>
