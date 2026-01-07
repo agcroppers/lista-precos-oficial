@@ -350,6 +350,81 @@
       .chooseBtn{ padding:14px; }
       .pPrices{ grid-template-columns: 1fr; }
     }
+
+    /* ===== Auth UI ===== */
+    .authForm{
+      margin-top: 10px;
+      display:grid;
+      gap:10px;
+    }
+    .authRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .authField{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .authField label{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .authField input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,.10);
+      outline:none;
+      background: rgba(255,255,255,.75);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(8px);
+      font-size:14px;
+    }
+    .authActions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:4px;
+      align-items:center;
+    }
+    .authBtn{
+      appearance:none;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.78);
+      border-radius: 14px;
+      padding:12px 14px;
+      cursor:pointer;
+      box-shadow: var(--shadow2);
+      font-size:13px;
+      font-weight:650;
+    }
+    .authBtn.primary{
+      background: linear-gradient(#eafff1, #dff7ea);
+      border-color: rgba(46,139,87,.25);
+    }
+    .authMsg{
+      margin-top:6px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .authError{
+      margin-top:6px;
+      font-size:13px;
+      color:#b42318;
+    }
+    .linkBtn{
+      border:0;
+      background:transparent;
+      color:#2b74c7;
+      cursor:pointer;
+      padding:0;
+      font-size:13px;
+    }
+    @media (max-width: 820px){
+      .authRow{ grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -451,6 +526,9 @@
     // ======== UI ========
     const app = document.getElementById('app');
 
+    // usado para mostrar e-mail logado
+    window.__currentUserEmail = window.__currentUserEmail || '';
+
     const iconUser = () => `
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" fill="white" opacity=".95"/>
@@ -545,6 +623,7 @@
           <div class="metaRow">
             <div class="badge">${dot} <strong>${ds.label}</strong></div>
             <div class="rightMeta">
+              <div class="chip"><span class="muted">Usuário:</span> <strong class="mono">${escapeHtml(window.__currentUserEmail || '—')}</strong></div>
               <div class="chip"><span class="muted">Itens:</span> <strong class="mono">${count}</strong></div>
               <div class="chip">
                 <span class="muted">Preço:</span>
@@ -555,6 +634,7 @@
                 </select>
               </div>
               <button class="chip" type="button" onclick="window.__resetChoice()" title="Trocar na primeira tela">Trocar lista</button>
+              <button class="chip" type="button" onclick="window.__signOut && window.__signOut()" title="Sair">Sair</button>
             </div>
           </div>
 
@@ -675,8 +755,8 @@
       console.assert(Array.isArray(t3) && t3.length === 1, 'filterRows(array) deve preservar itens quando busca vazia');
     })();
 
-    // ======== Boot ========
-    (function init(){
+    // ======== Boot (chamado após autenticação) ========
+    window.__bootPricesApp = function bootPricesApp(){
       try{
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved === 'consumidor' || saved === 'distribuicao') selected = saved;
@@ -684,7 +764,137 @@
 
       if (!selected) renderChooser();
       else renderApp();
-    })();
+    };
+  </script>
+
+  <!-- Firebase Auth gate (login obrigatório antes de renderizar a lista) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendPasswordResetEmail,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyARpM8n6c12Al6YgPxD_GOuAmLs6U2y4us",
+      authDomain: "ag-croppers.firebaseapp.com",
+      projectId: "ag-croppers",
+      storageBucket: "ag-croppers.firebasestorage.app",
+      messagingSenderId: "1009802908012",
+      appId: "1:1009802908012:web:c1ff8ec5ff65d16e4b2349",
+      measurementId: "G-JC9RK9KYTY"
+    };
+
+    const fbApp = initializeApp(firebaseConfig);
+    const auth = getAuth(fbApp);
+
+    const root = document.getElementById("app");
+
+    // Exposto para UI (mostrar e-mail + botão Sair)
+    window.__currentUserEmail = "";
+    window.__signOut = async () => {
+      await signOut(auth);
+    };
+
+    function mapAuthError(err){
+      const code = err?.code || "";
+      if (code.includes("invalid") || code.includes("wrong-password")) return "E-mail ou senha inválidos.";
+      if (code.includes("user-not-found")) return "Usuário não encontrado.";
+      if (code.includes("email-already-in-use")) return "Este e-mail já está em uso.";
+      if (code.includes("weak-password")) return "Senha fraca. Use pelo menos 6 caracteres.";
+      if (code.includes("too-many-requests")) return "Muitas tentativas. Aguarde e tente novamente.";
+      if (code.includes("network-request-failed")) return "Falha de rede. Verifique sua conexão e tente novamente.";
+      return "Não foi possível autenticar. Verifique os dados e tente novamente.";
+    }
+
+    function renderLogin(errorText = ""){
+      root.innerHTML = `
+        <section class="chooser">
+          <div class="chooserCard">
+            <div class="chooserTop">
+              <h2>Acesso restrito</h2>
+              <p>Faça login para visualizar a Lista de Preços Oficiais.</p>
+            </div>
+
+            <div class="authForm">
+              <div class="authRow">
+                <div class="authField">
+                  <label for="authEmail">E-mail</label>
+                  <input id="authEmail" type="email" placeholder="seuemail@empresa.com" autocomplete="email" />
+                </div>
+                <div class="authField">
+                  <label for="authPass">Senha</label>
+                  <input id="authPass" type="password" placeholder="••••••••" autocomplete="current-password" />
+                </div>
+              </div>
+
+              <div class="authActions">
+                <button class="authBtn primary" id="btnLogin" type="button">Entrar</button>
+                <button class="authBtn" id="btnSignup" type="button">Criar conta</button>
+                <button class="linkBtn" id="btnReset" type="button">Esqueci minha senha</button>
+              </div>
+
+              ${errorText
+                ? `<div class="authError">${errorText}</div>`
+                : `<div class="authMsg">Se ainda não tiver acesso, crie uma conta. (O admin pode gerenciar usuários no Firebase → Authentication → Users.)</div>`
+              }
+            </div>
+          </div>
+        </section>
+      `;
+
+      const emailEl = document.getElementById("authEmail");
+      const passEl  = document.getElementById("authPass");
+
+      document.getElementById("btnLogin").addEventListener("click", async () => {
+        const email = (emailEl.value || "").trim();
+        const pass  = (passEl.value || "").trim();
+        try{
+          await signInWithEmailAndPassword(auth, email, pass);
+        }catch(e){
+          renderLogin(mapAuthError(e));
+        }
+      });
+
+      document.getElementById("btnSignup").addEventListener("click", async () => {
+        const email = (emailEl.value || "").trim();
+        const pass  = (passEl.value || "").trim();
+        try{
+          await createUserWithEmailAndPassword(auth, email, pass);
+        }catch(e){
+          renderLogin(mapAuthError(e));
+        }
+      });
+
+      document.getElementById("btnReset").addEventListener("click", async () => {
+        const email = (emailEl.value || "").trim();
+        if (!email){
+          renderLogin("Informe o e-mail para enviar o link de redefinição.");
+          return;
+        }
+        try{
+          await sendPasswordResetEmail(auth, email);
+          renderLogin("Link de redefinição enviado. Verifique seu e-mail.");
+        }catch(e){
+          renderLogin(mapAuthError(e));
+        }
+      });
+    }
+
+    // Gate: só libera a lista após autenticação
+    onAuthStateChanged(auth, (user) => {
+      if (user){
+        window.__currentUserEmail = user.email || "";
+        window.__bootPricesApp?.();
+      }else{
+        window.__currentUserEmail = "";
+        renderLogin();
+      }
+    });
   </script>
 </body>
 </html>
