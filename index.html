@@ -18,6 +18,7 @@
       --radiusLG:20px;
       --headGrad: linear-gradient(#d7dee7, #c8d0da);
       --accent:#2e8b57;
+      --accentDeep:#1f5a39;
     }
 
     *{ box-sizing:border-box; }
@@ -36,6 +37,142 @@
     }
 
     .app{ width:min(1180px, 100%); }
+
+    /* ===== Login (clean) ===== */
+    .authWrap{
+      min-height: calc(100vh - 56px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 8px 0 24px;
+    }
+
+    .authCard{
+      width: min(560px, 100%);
+      border-radius: var(--radiusXL);
+      background: rgba(255,255,255,.78);
+      border:1px solid rgba(255,255,255,.55);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+
+    .authBrand{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:16px 18px;
+      background: linear-gradient(180deg, var(--accentDeep), var(--accent));
+      color:white;
+      font-weight:700;
+      letter-spacing:.2px;
+      font-size:16px;
+    }
+
+    .authBody{
+      padding:20px 20px 18px;
+    }
+
+    .authTitle{
+      margin:0;
+      font-size:22px;
+      font-weight:700;
+      letter-spacing:.2px;
+      color:#13301f;
+      text-align:center;
+    }
+
+    .authSub{
+      margin:8px 0 16px;
+      color:var(--muted);
+      font-size:13px;
+      text-align:center;
+      line-height:1.35;
+    }
+
+    .authGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      margin-top: 6px;
+    }
+
+    .authField{
+      position:relative;
+    }
+
+    .authField input{
+      width:100%;
+      padding:12px 12px 12px 40px;
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,.12);
+      outline:none;
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow2);
+      font-size:14px;
+    }
+
+    .authField svg{
+      position:absolute;
+      left:12px;
+      top:50%;
+      transform: translateY(-50%);
+      width:18px; height:18px;
+      opacity:.55;
+    }
+
+    .authActions{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      margin-top: 10px;
+    }
+
+    .authBtn{
+      appearance:none;
+      border:0;
+      cursor:pointer;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:700;
+      background: linear-gradient(180deg, #2a7c50, #206140);
+      color:white;
+      box-shadow: 0 12px 18px rgba(0,0,0,.12);
+    }
+
+    .authBtn:active{ transform: translateY(1px); }
+
+    .authLinks{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      margin-top: 6px;
+      font-size:12px;
+    }
+
+    .authLinks a{
+      color:#2b74c7;
+      text-decoration:none;
+    }
+    .authLinks a:hover{ text-decoration:underline; }
+
+    .authNote{
+      margin-top: 10px;
+      font-size:11px;
+      color:var(--muted);
+      text-align:center;
+    }
+
+    .authError{
+      margin-top: 10px;
+      background: rgba(220, 38, 38, .08);
+      border: 1px solid rgba(220, 38, 38, .20);
+      color: #991b1b;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 12px;
+      display:none;
+    }
 
     /* Top bar */
     .topbar{
@@ -181,6 +318,11 @@
       outline:none;
       cursor:pointer;
       color:#24303c;
+    }
+
+    .chipBtn{
+      cursor:pointer;
+      user-select:none;
     }
 
     /* Table */
@@ -344,86 +486,15 @@
       .specials{ grid-template-columns: 1fr; }
     }
 
+    @media (max-width: 520px){
+      .authBody{ padding:18px 16px 16px; }
+    }
+
     @media (max-width: 420px){
       body{ padding:22px 12px 28px; }
       .shell{ padding:14px; }
       .chooseBtn{ padding:14px; }
       .pPrices{ grid-template-columns: 1fr; }
-    }
-
-    /* ===== Auth UI ===== */
-    .authForm{
-      margin-top: 10px;
-      display:grid;
-      gap:10px;
-    }
-    .authRow{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    .authField{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-    .authField label{
-      font-size:12px;
-      color:var(--muted);
-    }
-    .authField input{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(0,0,0,.10);
-      outline:none;
-      background: rgba(255,255,255,.75);
-      box-shadow: var(--shadow2);
-      backdrop-filter: blur(8px);
-      font-size:14px;
-    }
-    .authActions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:4px;
-      align-items:center;
-    }
-    .authBtn{
-      appearance:none;
-      border:1px solid rgba(0,0,0,.10);
-      background: rgba(255,255,255,.78);
-      border-radius: 14px;
-      padding:12px 14px;
-      cursor:pointer;
-      box-shadow: var(--shadow2);
-      font-size:13px;
-      font-weight:650;
-    }
-    .authBtn.primary{
-      background: linear-gradient(#eafff1, #dff7ea);
-      border-color: rgba(46,139,87,.25);
-    }
-    .authMsg{
-      margin-top:6px;
-      font-size:13px;
-      color:var(--muted);
-    }
-    .authError{
-      margin-top:6px;
-      font-size:13px;
-      color:#b42318;
-    }
-    .linkBtn{
-      border:0;
-      background:transparent;
-      color:#2b74c7;
-      cursor:pointer;
-      padding:0;
-      font-size:13px;
-    }
-    @media (max-width: 820px){
-      .authRow{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -431,16 +502,50 @@
   <main class="app" id="app"></main>
 
   <!--
-    ✅ COMO COLOCAR SEUS DADOS AQUI
-    Cole o JSON (array) dentro destes <script type="application/json">.
-    Exemplo de linha:
-    {"item":"AVEIA PRETA","kg_ha":"40-60","kg_sc":40,"kg_bag":800,"preco_over":"10,00","preco_base":"9,20","preco_reduzido":"8,80"}
+    ✅ SEUS DADOS (mantidos como estão)
   -->
-  <script>window.DATA_CONSUMIDOR=[{item:'AG MIX CORINGA® — MIX',kg_ha:'30',kg_sc:25,kg_bag:'900',preco_over:'9,20',preco_base:'7,80',preco_reduzido:'6,50'},{item:'AG MIX NEMATOIDE® — MIX',kg_ha:'20',kg_sc:25,kg_bag:'900',preco_over:'13,20',preco_base:'11,20',preco_reduzido:'9,35'},{item:'AG MIX CANA® — MIX',kg_ha:'30',kg_sc:20,kg_bag:'800',preco_over:'12,00',preco_base:'10,20',preco_reduzido:'8,50'},{item:'AG MIX CAFÉ® — MIX',kg_ha:'30',kg_sc:25,kg_bag:'900',preco_over:'10,50',preco_base:'8,90',preco_reduzido:'7,70'},{item:'AG MIX INVERNO® — MIX',kg_ha:'50',kg_sc:20,kg_bag:'800',preco_over:'7,80',preco_base:'6,60',preco_reduzido:'5,20'},{item:'AG MIX PASTEJO® — MIX',kg_ha:'25',kg_sc:25,kg_bag:'900',preco_over:'8,95',preco_base:'7,60',preco_reduzido:'6,20'},{item:'AG MIX PRECOCE® — MIX',kg_ha:'25',kg_sc:25,kg_bag:'900',preco_over:'7,90',preco_base:'6,70',preco_reduzido:'5,50'},{item:'AG MIX PALHADA® — MIX',kg_ha:'25',kg_sc:25,kg_bag:'900',preco_over:'11,80',preco_base:'10,00',preco_reduzido:'8,50'},{item:'AG MIX PACK 01 — MIX',kg_ha:'25',kg_sc:20,kg_bag:'900',preco_over:'5,45',preco_base:'4,90',preco_reduzido:'4,50'},{item:'AG MIX PACK 02 — MIX',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'10,10',preco_base:'8,55',preco_reduzido:'7,30'},{item:'AG MIX PACK 03 — MIX',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'9,90',preco_base:'8,40',preco_reduzido:'7,00'},{item:'Crotalaria ochroleuca — Espécie',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'8,50',preco_base:'7,90',preco_reduzido:'7,20'},{item:'Crotalaria spectabilis — Espécie',kg_ha:'20',kg_sc:25,kg_bag:'1.000',preco_over:'11,35',preco_base:'10,20',preco_reduzido:'8,60'},{item:'Crotalaria juncea — Espécie',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'15,20',preco_base:'14,40',preco_reduzido:'12,80'},{item:'Crotalaria breviflora — Espécie',kg_ha:'20',kg_sc:25,kg_bag:'1.000',preco_over:'14,30',preco_base:'13,00',preco_reduzido:'10,70'},{item:'Guandu Forrageiro — IPR 43 Aratã',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'6,60',preco_base:'5,90',preco_reduzido:'5,40'},{item:'Guandu Forrageiro — Fava Larga',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'6,60',preco_base:'5,90',preco_reduzido:'5,40'},{item:'Tremoço Branco — Lupinus albus L.',kg_ha:'70',kg_sc:25,kg_bag:'1.000',preco_over:'3,20',preco_base:'2,90',preco_reduzido:'2,15'},{item:'Ervilhaca Comum — Ametista',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'11,45',preco_base:'10,40',preco_reduzido:'8,95'},{item:'Ervilhaca Peluda — SS Esmeralda',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'18,15',preco_base:'16,50',preco_reduzido:'15,30'},{item:'Ervilha Forrageira — IAPAR 83',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'11,80',preco_base:'10,70',preco_reduzido:'9,35'},{item:'Estilosantes — BRS Campo Grande',kg_ha:'12',kg_sc:25,kg_bag:'1.000',preco_over:'54,95',preco_base:'50,00',preco_reduzido:'47,10'},{item:'Braq. Ruziziensis — VC 80%',kg_ha:'6',kg_sc:20,kg_bag:'625',preco_over:'10,80',preco_base:'9,70',preco_reduzido:'8,30'},{item:'Braq. Ruziziensis — VC 80% + RootSafer',kg_ha:'6',kg_sc:20,kg_bag:'625',preco_over:'13,50',preco_base:'12,80',preco_reduzido:'10,80'},{item:'Braq. Ruziziensis — cv. BRS Piatã VC 80%',kg_ha:'10',kg_sc:25,kg_bag:'0',preco_over:'29,90',preco_base:'26,90',preco_reduzido:'24,00'},{item:'Milheto — BRS 1501',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'4,00',preco_base:'3,40',preco_reduzido:'3,10'},{item:'Milheto — ANM07',kg_ha:'15',kg_sc:25,kg_bag:'0',preco_over:'4,55',preco_base:'4,10',preco_reduzido:'3,60'},{item:'Capim Coracana — ANPG 209',kg_ha:'7',kg_sc:25,kg_bag:'1.000',preco_over:'6,05',preco_base:'5,50',preco_reduzido:'4,80'},{item:'Aveia Preta — Embrapa 139',kg_ha:'70',kg_sc:20,kg_bag:'700',preco_over:'5,20',preco_base:'4,70',preco_reduzido:'4,00'},{item:'Aveia Preta — Tropeira',kg_ha:'70',kg_sc:20,kg_bag:'700',preco_over:'5,20',preco_base:'4,70',preco_reduzido:'4,00'},{item:'Aveia Preta — AF1340 Ucraniana',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'5,20',preco_base:'4,70',preco_reduzido:'4,00'},{item:'Aveia Branca — URS Corona',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'3,85',preco_base:'3,50',preco_reduzido:'3,45'},{item:'Aveia Branca — URS Taura',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'3,85',preco_base:'3,50',preco_reduzido:'3,45'},{item:'Centeio — IPR 89',kg_ha:'55',kg_sc:25,kg_bag:'1.000',preco_over:'3,75',preco_base:'3,40',preco_reduzido:'2,90'},{item:'Nabo Forrageiro — IPR 116',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'6,85',preco_base:'6,20',preco_reduzido:'5,30'},{item:'Nabo Pé de Pato — Pé de Pato',kg_ha:'12',kg_sc:25,kg_bag:'1.000',preco_over:'13,80',preco_base:'12,40',preco_reduzido:'11,40'},{item:'Rabanete Forrageiro — Ceres Hunter',kg_ha:'4',kg_sc:25,kg_bag:'0',preco_over:'73,30',preco_base:'62,30',preco_reduzido:'60,35'},{item:'Crambe — FMS Brilhante',kg_ha:'15',kg_sc:10,kg_bag:'400',preco_over:'7,80',preco_base:'6,60',preco_reduzido:'6,00'},{item:'Trigo Mourisco — IPR 91 Baili / IPR 92 Altar',kg_ha:'50',kg_sc:15,kg_bag:'750',preco_over:'5,85',preco_base:'5,30',preco_reduzido:'4,70'}];window.DATA_DISTRIBUICAO=[{item:'AG MIX CORINGA® — MIX',kg_ha:'30',kg_sc:25,kg_bag:'900',preco_over:'7,70',preco_base:'6,90',preco_reduzido:'5,90'},{item:'AG MIX NEMATOIDE® — MIX',kg_ha:'20',kg_sc:25,kg_bag:'900',preco_over:'11,15',preco_base:'10,00',preco_reduzido:'7,95'},{item:'AG MIX CANA® — MIX',kg_ha:'30',kg_sc:20,kg_bag:'800',preco_over:'10,70',preco_base:'9,60',preco_reduzido:'7,70'},{item:'AG MIX CAFÉ® — MIX',kg_ha:'30',kg_sc:25,kg_bag:'900',preco_over:'8,85',preco_base:'7,95',preco_reduzido:'6,45'},{item:'AG MIX INVERNO® — MIX',kg_ha:'50',kg_sc:20,kg_bag:'800',preco_over:'6,55',preco_base:'5,80',preco_reduzido:'4,75'},{item:'AG MIX PASTEJO® — MIX',kg_ha:'25',kg_sc:25,kg_bag:'900',preco_over:'7,80',preco_base:'7,00',preco_reduzido:'5,40'},{item:'AG MIX PRECOCE® — MIX',kg_ha:'25',kg_sc:20,kg_bag:'800',preco_over:'6,95',preco_base:'6,25',preco_reduzido:'5,00'},{item:'AG MIX PALHADA® — MIX',kg_ha:'25',kg_sc:25,kg_bag:'900',preco_over:'10,25',preco_base:'9,20',preco_reduzido:'7,70'},{item:'AG MIX PACK 01 — MIX',kg_ha:'25',kg_sc:20,kg_bag:'900',preco_over:'4,65',preco_base:'4,15',preco_reduzido:'3,80'},{item:'AG MIX PACK 02 — MIX',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'8,55',preco_base:'7,60',preco_reduzido:'6,20'},{item:'AG MIX PACK 03 — MIX',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'8,70',preco_base:'7,80',preco_reduzido:'6,75'},{item:'Crotalaria ochroleuca — Espécie',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'7,90',preco_base:'7,10',preco_reduzido:'6,40'},{item:'Crotalaria spectabilis — Espécie',kg_ha:'20',kg_sc:25,kg_bag:'1.000',preco_over:'10,15',preco_base:'9,10',preco_reduzido:'7,70'},{item:'Crotalaria juncea — Espécie',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'14,30',preco_base:'12,85',preco_reduzido:'11,60'},{item:'Crotalaria breviflora — Espécie',kg_ha:'20',kg_sc:25,kg_bag:'1.000',preco_over:'12,95',preco_base:'11,65',preco_reduzido:'8,55'},{item:'Guandu Forrageiro — IPR 43 Aratã',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'6,25',preco_base:'5,60',preco_reduzido:'4,70'},{item:'Guandu Forrageiro — Fava Larga',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'6,25',preco_base:'5,60',preco_reduzido:'4,70'},{item:'Tremoço Branco — Lupinus albus L.',kg_ha:'70',kg_sc:25,kg_bag:'1.000',preco_over:'2,85',preco_base:'2,55',preco_reduzido:'1,90'},{item:'Ervilhaca Comum — Ametista',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'10,40',preco_base:'9,35',preco_reduzido:'8,50'},{item:'Ervilhaca Peluda — SS Esmeralda',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'22,15',preco_base:'19,90',preco_reduzido:'18,55'},{item:'Ervilha Forrageira — IAPAR 83',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'11,35',preco_base:'10,20',preco_reduzido:'8,00'},{item:'Estilosantes — BRS Campo Grande',kg_ha:'12',kg_sc:25,kg_bag:'1.000',preco_over:'49,50',preco_base:'44,55',preco_reduzido:'41,75'},{item:'Braq. Ruziziensis — VC 80%',kg_ha:'6',kg_sc:20,kg_bag:'625',preco_over:'10,00',preco_base:'9,00',preco_reduzido:'8,35'},{item:'Braq. Ruziziensis — VC 80% + RootSafer',kg_ha:'6',kg_sc:20,kg_bag:'625',preco_over:'12,30',preco_base:'11,05',preco_reduzido:'10,00'},{item:'Braq. Ruziziensis — cv. BRS Piatã VC 80%',kg_ha:'10',kg_sc:20,kg_bag:'700',preco_over:'26,40',preco_base:'23,75',preco_reduzido:'22,40'},{item:'Milheto — BRS 1501',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'2,75',preco_base:'2,45',preco_reduzido:'2,30'},{item:'Milheto — ANM07',kg_ha:'15',kg_sc:25,kg_bag:'0',preco_over:'4,30',preco_base:'3,85',preco_reduzido:'3,30'},{item:'Capim Coracana — ANPG 209',kg_ha:'7',kg_sc:25,kg_bag:'1.000',preco_over:'5,45',preco_base:'4,90',preco_reduzido:'4,25'},{item:'Aveia Preta — Embrapa 139',kg_ha:'70',kg_sc:20,kg_bag:'700',preco_over:'4,30',preco_base:'3,85',preco_reduzido:'3,45'},{item:'Aveia Preta — Tropeira',kg_ha:'70',kg_sc:20,kg_bag:'700',preco_over:'4,30',preco_base:'3,85',preco_reduzido:'3,45'},{item:'Aveia Preta — AF1340 Ucraniana',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'4,30',preco_base:'3,85',preco_reduzido:'3,45'},{item:'Aveia Branca — URS Corona',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'4,10',preco_base:'3,65',preco_reduzido:'3,35'},{item:'Aveia Branca — URS Taura',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'4,10',preco_base:'3,65',preco_reduzido:'3,35'},{item:'Centeio — IPR 89',kg_ha:'55',kg_sc:25,kg_bag:'1.000',preco_over:'4,75',preco_base:'4,25',preco_reduzido:'3,80'},{item:'Nabo Forrageiro — IPR 116',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'5,35',preco_base:'4,80',preco_reduzido:'4,45'},{item:'Nabo Pé de Pato — Pé de Pato',kg_ha:'12',kg_sc:25,kg_bag:'1.000',preco_over:'12,60',preco_base:'11,30',preco_reduzido:'10,35'},{item:'Rabanete Forrageiro — Ceres Hunter',kg_ha:'4',kg_sc:25,kg_bag:'0',preco_over:'80,00',preco_base:'72,00',preco_reduzido:'63,75'},{item:'Crambe — FMS Brilhante',kg_ha:'15',kg_sc:10,kg_bag:'400',preco_over:'5,60',preco_base:'5,00',preco_reduzido:'4,50'},{item:'Trigo Mourisco — IPR 91 Baili',kg_ha:'50',kg_sc:25,kg_bag:'1.000',preco_over:'5,00',preco_base:'4,50',preco_reduzido:'4,00'},{item:'Trigo Mourisco — IPR 92 Altar',kg_ha:'50',kg_sc:25,kg_bag:'1.000',preco_over:'5,00',preco_base:'4,50',preco_reduzido:'4,00'}];window.SPECIALS_CONSUMIDOR=[{item:'ROOTSAFER',descricao:'0,25–0,35 L/ha · valor por litro do produto',preco:'185,00'},{item:'BIORECOVER',descricao:'Bacillus + T. asperellum · valor por kg de semente tratada (1,25/kg TS)',preco:'1,25'}];window.SPECIALS_DISTRIBUICAO=[{item:'ROOTSAFER',descricao:'0,25–0,35 L/ha · valor por litro do produto',preco:'127,50'},{item:'BIORECOVER',descricao:'Bacillus + T. asperellum · valor por kg de semente tratada',preco:'1,15'}];</script>
-
   <script>
-    // ======== DADOS ========
-    // (Se você não colar os arrays acima, a página continua funcionando — só ficará vazia.)
+    window.DATA_CONSUMIDOR=[{item:'AG MIX CORINGA® — MIX',kg_ha:'30',kg_sc:25,kg_bag:'900',preco_over:'9,20',preco_base:'7,80',preco_reduzido:'6,50'},{item:'AG MIX NEMATOIDE® — MIX',kg_ha:'20',kg_sc:25,kg_bag:'900',preco_over:'13,20',preco_base:'11,20',preco_reduzido:'9,35'},{item:'AG MIX CANA® — MIX',kg_ha:'30',kg_sc:20,kg_bag:'800',preco_over:'12,00',preco_base:'10,20',preco_reduzido:'8,50'},{item:'AG MIX CAFÉ® — MIX',kg_ha:'30',kg_sc:25,kg_bag:'900',preco_over:'10,50',preco_base:'8,90',preco_reduzido:'7,70'},{item:'AG MIX INVERNO® — MIX',kg_ha:'50',kg_sc:20,kg_bag:'800',preco_over:'7,80',preco_base:'6,60',preco_reduzido:'5,20'},{item:'AG MIX PASTEJO® — MIX',kg_ha:'25',kg_sc:25,kg_bag:'900',preco_over:'8,95',preco_base:'7,60',preco_reduzido:'6,20'},{item:'AG MIX PRECOCE® — MIX',kg_ha:'25',kg_sc:25,kg_bag:'900',preco_over:'7,90',preco_base:'6,70',preco_reduzido:'5,50'},{item:'AG MIX PALHADA® — MIX',kg_ha:'25',kg_sc:25,kg_bag:'900',preco_over:'11,80',preco_base:'10,00',preco_reduzido:'8,50'},{item:'AG MIX PACK 01 — MIX',kg_ha:'25',kg_sc:20,kg_bag:'900',preco_over:'5,45',preco_base:'4,90',preco_reduzido:'4,50'},{item:'AG MIX PACK 02 — MIX',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'10,10',preco_base:'8,55',preco_reduzido:'7,30'},{item:'AG MIX PACK 03 — MIX',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'9,90',preco_base:'8,40',preco_reduzido:'7,00'},{item:'Crotalaria ochroleuca — Espécie',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'8,50',preco_base:'7,90',preco_reduzido:'7,20'},{item:'Crotalaria spectabilis — Espécie',kg_ha:'20',kg_sc:25,kg_bag:'1.000',preco_over:'11,35',preco_base:'10,20',preco_reduzido:'8,60'},{item:'Crotalaria juncea — Espécie',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'15,20',preco_base:'14,40',preco_reduzido:'12,80'},{item:'Crotalaria breviflora — Espécie',kg_ha:'20',kg_sc:25,kg_bag:'1.000',preco_over:'14,30',preco_base:'13,00',preco_reduzido:'10,70'},{item:'Guandu Forrageiro — IPR 43 Aratã',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'6,60',preco_base:'5,90',preco_reduzido:'5,40'},{item:'Guandu Forrageiro — Fava Larga',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'6,60',preco_base:'5,90',preco_reduzido:'5,40'},{item:'Tremoço Branco — Lupinus albus L.',kg_ha:'70',kg_sc:25,kg_bag:'1.000',preco_over:'3,20',preco_base:'2,90',preco_reduzido:'2,15'},{item:'Ervilhaca Comum — Ametista',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'11,45',preco_base:'10,40',preco_reduzido:'8,95'},{item:'Ervilhaca Peluda — SS Esmeralda',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'18,15',preco_base:'16,50',preco_reduzido:'15,30'},{item:'Ervilha Forrageira — IAPAR 83',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'11,80',preco_base:'10,70',preco_reduzido:'9,35'},{item:'Estilosantes — BRS Campo Grande',kg_ha:'12',kg_sc:25,kg_bag:'1.000',preco_over:'54,95',preco_base:'50,00',preco_reduzido:'47,10'},{item:'Braq. Ruziziensis — VC 80%',kg_ha:'6',kg_sc:20,kg_bag:'625',preco_over:'10,80',preco_base:'9,70',preco_reduzido:'8,30'},{item:'Braq. Ruziziensis — VC 80% + RootSafer',kg_ha:'6',kg_sc:20,kg_bag:'625',preco_over:'13,50',preco_base:'12,80',preco_reduzido:'10,80'},{item:'Braq. Ruziziensis — cv. BRS Piatã VC 80%',kg_ha:'10',kg_sc:25,kg_bag:'0',preco_over:'29,90',preco_base:'26,90',preco_reduzido:'24,00'},{item:'Milheto — BRS 1501',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'4,00',preco_base:'3,40',preco_reduzido:'3,10'},{item:'Milheto — ANM07',kg_ha:'15',kg_sc:25,kg_bag:'0',preco_over:'4,55',preco_base:'4,10',preco_reduzido:'3,60'},{item:'Capim Coracana — ANPG 209',kg_ha:'7',kg_sc:25,kg_bag:'1.000',preco_over:'6,05',preco_base:'5,50',preco_reduzido:'4,80'},{item:'Aveia Preta — Embrapa 139',kg_ha:'70',kg_sc:20,kg_bag:'700',preco_over:'5,20',preco_base:'4,70',preco_reduzido:'4,00'},{item:'Aveia Preta — Tropeira',kg_ha:'70',kg_sc:20,kg_bag:'700',preco_over:'5,20',preco_base:'4,70',preco_reduzido:'4,00'},{item:'Aveia Preta — AF1340 Ucraniana',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'5,20',preco_base:'4,70',preco_reduzido:'4,00'},{item:'Aveia Branca — URS Corona',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'3,85',preco_base:'3,50',preco_reduzido:'3,45'},{item:'Aveia Branca — URS Taura',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'3,85',preco_base:'3,50',preco_reduzido:'3,45'},{item:'Centeio — IPR 89',kg_ha:'55',kg_sc:25,kg_bag:'1.000',preco_over:'3,75',preco_base:'3,40',preco_reduzido:'2,90'},{item:'Nabo Forrageiro — IPR 116',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'6,85',preco_base:'6,20',preco_reduzido:'5,30'},{item:'Nabo Pé de Pato — Pé de Pato',kg_ha:'12',kg_sc:25,kg_bag:'1.000',preco_over:'13,80',preco_base:'12,40',preco_reduzido:'11,40'},{item:'Rabanete Forrageiro — Ceres Hunter',kg_ha:'4',kg_sc:25,kg_bag:'0',preco_over:'73,30',preco_base:'62,30',preco_reduzido:'60,35'},{item:'Crambe — FMS Brilhante',kg_ha:'15',kg_sc:10,kg_bag:'400',preco_over:'7,80',preco_base:'6,60',preco_reduzido:'6,00'},{item:'Trigo Mourisco — IPR 91 Baili / IPR 92 Altar',kg_ha:'50',kg_sc:15,kg_bag:'750',preco_over:'5,85',preco_base:'5,30',preco_reduzido:'4,70'}];
+
+    window.DATA_DISTRIBUICAO=[{item:'AG MIX CORINGA® — MIX',kg_ha:'30',kg_sc:25,kg_bag:'900',preco_over:'7,70',preco_base:'6,90',preco_reduzido:'5,90'},{item:'AG MIX NEMATOIDE® — MIX',kg_ha:'20',kg_sc:25,kg_bag:'900',preco_over:'11,15',preco_base:'10,00',preco_reduzido:'7,95'},{item:'AG MIX CANA® — MIX',kg_ha:'30',kg_sc:20,kg_bag:'800',preco_over:'10,70',preco_base:'9,60',preco_reduzido:'7,70'},{item:'AG MIX CAFÉ® — MIX',kg_ha:'30',kg_sc:25,kg_bag:'900',preco_over:'8,85',preco_base:'7,95',preco_reduzido:'6,45'},{item:'AG MIX INVERNO® — MIX',kg_ha:'50',kg_sc:20,kg_bag:'800',preco_over:'6,55',preco_base:'5,80',preco_reduzido:'4,75'},{item:'AG MIX PASTEJO® — MIX',kg_ha:'25',kg_sc:25,kg_bag:'900',preco_over:'7,80',preco_base:'7,00',preco_reduzido:'5,40'},{item:'AG MIX PRECOCE® — MIX',kg_ha:'25',kg_sc:20,kg_bag:'800',preco_over:'6,95',preco_base:'6,25',preco_reduzido:'5,00'},{item:'AG MIX PALHADA® — MIX',kg_ha:'25',kg_sc:25,kg_bag:'900',preco_over:'10,25',preco_base:'9,20',preco_reduzido:'7,70'},{item:'AG MIX PACK 01 — MIX',kg_ha:'25',kg_sc:20,kg_bag:'900',preco_over:'4,65',preco_base:'4,15',preco_reduzido:'3,80'},{item:'AG MIX PACK 02 — MIX',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'8,55',preco_base:'7,60',preco_reduzido:'6,20'},{item:'AG MIX PACK 03 — MIX',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'8,70',preco_base:'7,80',preco_reduzido:'6,75'},{item:'Crotalaria ochroleuca — Espécie',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'7,90',preco_base:'7,10',preco_reduzido:'6,40'},{item:'Crotalaria spectabilis — Espécie',kg_ha:'20',kg_sc:25,kg_bag:'1.000',preco_over:'10,15',preco_base:'9,10',preco_reduzido:'7,70'},{item:'Crotalaria juncea — Espécie',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'14,30',preco_base:'12,85',preco_reduzido:'11,60'},{item:'Crotalaria breviflora — Espécie',kg_ha:'20',kg_sc:25,kg_bag:'1.000',preco_over:'12,95',preco_base:'11,65',preco_reduzido:'8,55'},{item:'Guandu Forrageiro — IPR 43 Aratã',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'6,25',preco_base:'5,60',preco_reduzido:'4,70'},{item:'Guandu Forrageiro — Fava Larga',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'6,25',preco_base:'5,60',preco_reduzido:'4,70'},{item:'Tremoço Branco — Lupinus albus L.',kg_ha:'70',kg_sc:25,kg_bag:'1.000',preco_over:'2,85',preco_base:'2,55',preco_reduzido:'1,90'},{item:'Ervilhaca Comum — Ametista',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'10,40',preco_base:'9,35',preco_reduzido:'8,50'},{item:'Ervilhaca Peluda — SS Esmeralda',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'22,15',preco_base:'19,90',preco_reduzido:'18,55'},{item:'Ervilha Forrageira — IAPAR 83',kg_ha:'30',kg_sc:25,kg_bag:'1.000',preco_over:'11,35',preco_base:'10,20',preco_reduzido:'8,00'},{item:'Estilosantes — BRS Campo Grande',kg_ha:'12',kg_sc:25,kg_bag:'1.000',preco_over:'49,50',preco_base:'44,55',preco_reduzido:'41,75'},{item:'Braq. Ruziziensis — VC 80%',kg_ha:'6',kg_sc:20,kg_bag:'625',preco_over:'10,00',preco_base:'9,00',preco_reduzido:'8,35'},{item:'Braq. Ruziziensis — VC 80% + RootSafer',kg_ha:'6',kg_sc:20,kg_bag:'625',preco_over:'12,30',preco_base:'11,05',preco_reduzido:'10,00'},{item:'Braq. Ruziziensis — cv. BRS Piatã VC 80%',kg_ha:'10',kg_sc:20,kg_bag:'700',preco_over:'26,40',preco_base:'23,75',preco_reduzido:'22,40'},{item:'Milheto — BRS 1501',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'2,75',preco_base:'2,45',preco_reduzido:'2,30'},{item:'Milheto — ANM07',kg_ha:'15',kg_sc:25,kg_bag:'0',preco_over:'4,30',preco_base:'3,85',preco_reduzido:'3,30'},{item:'Capim Coracana — ANPG 209',kg_ha:'7',kg_sc:25,kg_bag:'1.000',preco_over:'5,45',preco_base:'4,90',preco_reduzido:'4,25'},{item:'Aveia Preta — Embrapa 139',kg_ha:'70',kg_sc:20,kg_bag:'700',preco_over:'4,30',preco_base:'3,85',preco_reduzido:'3,45'},{item:'Aveia Preta — Tropeira',kg_ha:'70',kg_sc:20,kg_bag:'700',preco_over:'4,30',preco_base:'3,85',preco_reduzido:'3,45'},{item:'Aveia Preta — AF1340 Ucraniana',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'4,30',preco_base:'3,85',preco_reduzido:'3,45'},{item:'Aveia Branca — URS Corona',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'4,10',preco_base:'3,65',preco_reduzido:'3,35'},{item:'Aveia Branca — URS Taura',kg_ha:'70',kg_sc:20,kg_bag:'650',preco_over:'4,10',preco_base:'3,65',preco_reduzido:'3,35'},{item:'Centeio — IPR 89',kg_ha:'55',kg_sc:25,kg_bag:'1.000',preco_over:'4,75',preco_base:'4,25',preco_reduzido:'3,80'},{item:'Nabo Forrageiro — IPR 116',kg_ha:'15',kg_sc:25,kg_bag:'1.000',preco_over:'5,35',preco_base:'4,80',preco_reduzido:'4,45'},{item:'Nabo Pé de Pato — Pé de Pato',kg_ha:'12',kg_sc:25,kg_bag:'1.000',preco_over:'12,60',preco_base:'11,30',preco_reduzido:'10,35'},{item:'Rabanete Forrageiro — Ceres Hunter',kg_ha:'4',kg_sc:25,kg_bag:'0',preco_over:'80,00',preco_base:'72,00',preco_reduzido:'63,75'},{item:'Crambe — FMS Brilhante',kg_ha:'15',kg_sc:10,kg_bag:'400',preco_over:'5,60',preco_base:'5,00',preco_reduzido:'4,50'},{item:'Trigo Mourisco — IPR 91 Baili',kg_ha:'50',kg_sc:25,kg_bag:'1.000',preco_over:'5,00',preco_base:'4,50',preco_reduzido:'4,00'},{item:'Trigo Mourisco — IPR 92 Altar',kg_ha:'50',kg_sc:25,kg_bag:'1.000',preco_over:'5,00',preco_base:'4,50',preco_reduzido:'4,00'}];
+
+    window.SPECIALS_CONSUMIDOR=[{item:'ROOTSAFER',descricao:'0,25–0,35 L/ha · valor por litro do produto',preco:'185,00'},{item:'BIORECOVER',descricao:'Bacillus + T. asperellum · valor por kg de semente tratada (1,25/kg TS)',preco:'1,25'}];
+    window.SPECIALS_DISTRIBUICAO=[{item:'ROOTSAFER',descricao:'0,25–0,35 L/ha · valor por litro do produto',preco:'127,50'},{item:'BIORECOVER',descricao:'Bacillus + T. asperellum · valor por kg de semente tratada',preco:'1,15'}];
+  </script>
+
+  <script type="module">
+    // =========================
+    // Firebase Auth (Email/Senha) - SEM cadastro
+    // =========================
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      signOut,
+      sendPasswordResetEmail,
+      setPersistence,
+      browserLocalPersistence
+    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    // --- SUA CONFIG (mantida) ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyARpM8n6c12Al6YgPxD_GOuAmLs6U2y4us",
+      authDomain: "ag-croppers.firebaseapp.com",
+      projectId: "ag-croppers",
+      storageBucket: "ag-croppers.firebasestorage.app",
+      messagingSenderId: "1009802908012",
+      appId: "1:1009802908012:web:c1ff8ec5ff65d16e4b2349",
+      measurementId: "G-JC9RK9KYTY"
+    };
+
+    const fbApp = initializeApp(firebaseConfig);
+    const auth = getAuth(fbApp);
+
+    // Persistência: mantém logado neste navegador
+    await setPersistence(auth, browserLocalPersistence);
+
+    // ======== APP (seu código, com gate de autenticação) ========
     function readJsonScript(id, fallback){
       const el = document.getElementById(id);
       if (!el) return fallback;
@@ -475,7 +580,6 @@
 
     // ======== Helpers ========
     const fmtBRL = (v) => {
-      // Mantém estilo "9,20" vindo do PDF.
       if (v === null || v === undefined || v === '') return '—';
       return `R$ ${v}`;
     };
@@ -510,7 +614,6 @@
     };
 
     const filterRows = (rows) => {
-      // GARANTIA: sempre retorna array
       const safe = asArray(rows);
       const t = normalize(state.term);
       if (!t) return safe;
@@ -525,9 +628,6 @@
 
     // ======== UI ========
     const app = document.getElementById('app');
-
-    // usado para mostrar e-mail logado
-    window.__currentUserEmail = window.__currentUserEmail || '';
 
     const iconUser = () => `
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -551,6 +651,127 @@
         <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
       </svg>
     `;
+
+    const iconMail = () => `
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 7h16v10H4V7Z" stroke="currentColor" stroke-width="2"/>
+        <path d="m4 8 8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+
+    const iconLock = () => `
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M6 11h12v10H6V11Z" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    `;
+
+    function showAuthError(msg){
+      const el = document.getElementById('authError');
+      if (!el) return;
+      el.textContent = msg || 'Falha ao autenticar.';
+      el.style.display = 'block';
+    }
+
+    function clearAuthError(){
+      const el = document.getElementById('authError');
+      if (!el) return;
+      el.textContent = '';
+      el.style.display = 'none';
+    }
+
+    const renderLogin = () => {
+      app.innerHTML = `
+        <section class="authWrap">
+          <div class="authCard">
+            <div class="authBrand">AG Croppers</div>
+            <div class="authBody">
+              <h2 class="authTitle">Bem-vindo</h2>
+              <p class="authSub">Faça login para acessar a Lista de Preços Oficiais.</p>
+
+              <div class="authGrid">
+                <div class="authField">
+                  ${iconMail()}
+                  <input id="loginEmail" type="email" autocomplete="username" placeholder="E-mail" />
+                </div>
+                <div class="authField">
+                  ${iconLock()}
+                  <input id="loginPass" type="password" autocomplete="current-password" placeholder="Senha" />
+                </div>
+              </div>
+
+              <div class="authActions">
+                <button class="authBtn" id="btnLogin" type="button">Entrar</button>
+              </div>
+
+              <div class="authLinks">
+                <a href="#" id="lnkReset">Esqueci minha senha</a>
+              </div>
+
+              <div class="authError" id="authError"></div>
+
+              <div class="authNote">APENAS PARA USO INTERNO. PROIBIDO O REENVIO OU COMPARTILHAMENTO.</div>
+            </div>
+          </div>
+        </section>
+      `;
+
+      const emailEl = document.getElementById('loginEmail');
+      const passEl  = document.getElementById('loginPass');
+      const btn     = document.getElementById('btnLogin');
+      const reset   = document.getElementById('lnkReset');
+
+      const doLogin = async () => {
+        clearAuthError();
+        const email = (emailEl?.value || '').trim();
+        const pass  = (passEl?.value || '').trim();
+
+        if (!email || !pass){
+          showAuthError('Informe e-mail e senha.');
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Entrando...';
+
+        try{
+          await signInWithEmailAndPassword(auth, email, pass);
+          // onAuthStateChanged vai renderizar o app
+        }catch(err){
+          const code = err?.code || '';
+          if (code.includes('auth/invalid-credential') || code.includes('auth/wrong-password') || code.includes('auth/user-not-found')){
+            showAuthError('E-mail ou senha inválidos.');
+          }else if (code.includes('auth/too-many-requests')){
+            showAuthError('Muitas tentativas. Tente novamente em alguns minutos.');
+          }else{
+            showAuthError('Falha ao autenticar. Verifique e tente novamente.');
+          }
+        }finally{
+          btn.disabled = false;
+          btn.textContent = 'Entrar';
+        }
+      };
+
+      btn?.addEventListener('click', doLogin);
+      passEl?.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
+      emailEl?.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
+
+      reset?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        clearAuthError();
+        const email = (emailEl?.value || '').trim();
+        if (!email){
+          showAuthError('Digite seu e-mail para receber o link de redefinição.');
+          return;
+        }
+        try{
+          await sendPasswordResetEmail(auth, email);
+          showAuthError('Link de redefinição enviado. Verifique seu e-mail.');
+        }catch(err){
+          showAuthError('Não foi possível enviar o link. Verifique o e-mail informado.');
+        }
+      });
+    };
 
     const renderChooser = () => {
       app.innerHTML = `
@@ -586,7 +807,6 @@
       const ds = getDataset();
       if (!ds) return renderChooser();
 
-      // ✅ Fix do erro: filtered SEMPRE é array
       const filtered = filterRows(ds.rows) || [];
       const safeFiltered = asArray(filtered);
       const count = safeFiltered.length;
@@ -594,6 +814,8 @@
       const dot = ds.dot === 'green'
         ? '<span class="pillDot" style="background:#2e8b57; box-shadow:0 0 0 3px rgba(46,139,87,.12)"></span>'
         : '<span class="pillDot" style="background:#2b74c7; box-shadow:0 0 0 3px rgba(43,116,199,.12)"></span>';
+
+      const userEmail = (auth.currentUser?.email || '').trim();
 
       app.innerHTML = `
         <header class="topbar">
@@ -622,9 +844,10 @@
         <section class="shell">
           <div class="metaRow">
             <div class="badge">${dot} <strong>${ds.label}</strong></div>
+
             <div class="rightMeta">
-              <div class="chip"><span class="muted">Usuário:</span> <strong class="mono">${escapeHtml(window.__currentUserEmail || '—')}</strong></div>
               <div class="chip"><span class="muted">Itens:</span> <strong class="mono">${count}</strong></div>
+
               <div class="chip">
                 <span class="muted">Preço:</span>
                 <select id="tier" aria-label="Selecionar tipo de preço">
@@ -633,8 +856,12 @@
                   <option value="reduzido" ${state.priceTier==='reduzido'?'selected':''}>Reduzido</option>
                 </select>
               </div>
-              <button class="chip" type="button" onclick="window.__resetChoice()" title="Trocar na primeira tela">Trocar lista</button>
-              <button class="chip" type="button" onclick="window.__signOut && window.__signOut()" title="Sair">Sair</button>
+
+              <button class="chip chipBtn" type="button" onclick="window.__resetChoice()" title="Trocar na primeira tela">Trocar lista</button>
+
+              <!-- 2.3) Recomendado: email logado + sair -->
+              ${userEmail ? `<div class="chip"><span class="muted">Logado:</span> <strong class="mono">${escapeHtml(userEmail)}</strong></div>` : ``}
+              <button class="chip chipBtn" type="button" onclick="window.__logout()" title="Sair">Sair</button>
             </div>
           </div>
 
@@ -744,8 +971,12 @@
       renderChooser();
     };
 
+    window.__logout = async () => {
+      try{ await signOut(auth); }catch(e){}
+      // onAuthStateChanged vai renderizar login
+    };
+
     // ======== “Testes” simples (não quebram a UI) ========
-    // (Você pode ver no console do navegador.)
     (function devTests(){
       const t1 = asArray(null);
       console.assert(Array.isArray(t1) && t1.length === 0, 'asArray(null) deve retornar []');
@@ -755,8 +986,7 @@
       console.assert(Array.isArray(t3) && t3.length === 1, 'filterRows(array) deve preservar itens quando busca vazia');
     })();
 
-    // ======== Boot (chamado após autenticação) ========
-    window.__bootPricesApp = function bootPricesApp(){
+    function initAfterLogin(){
       try{
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved === 'consumidor' || saved === 'distribuicao') selected = saved;
@@ -764,221 +994,17 @@
 
       if (!selected) renderChooser();
       else renderApp();
-    };
+    }
+
+    // ======== Gate de autenticação ========
+    onAuthStateChanged(auth, (user) => {
+      if (!user){
+        selected = null; // opcional: força o chooser após login
+        renderLogin();
+        return;
+      }
+      initAfterLogin();
+    });
   </script>
-
-  <!-- Firebase Auth gate (login obrigatório antes de renderizar a lista) -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import {
-    getAuth,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    sendPasswordResetEmail,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-  import {
-    getFirestore,
-    doc,
-    getDoc,
-    setDoc,
-    serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyARpM8n6c12Al6YgPxD_GOuAmLs6U2y4us",
-    authDomain: "ag-croppers.firebaseapp.com",
-    projectId: "ag-croppers",
-    storageBucket: "ag-croppers.firebasestorage.app",
-    messagingSenderId: "1009802908012",
-    appId: "1:1009802908012:web:c1ff8ec5ff65d16e4b2349",
-    measurementId: "G-JC9RK9KYTY"
-  };
-
-  const fbApp = initializeApp(firebaseConfig);
-  const auth = getAuth(fbApp);
-  const db = getFirestore(fbApp);
-
-  const root = document.getElementById("app");
-
-  // Exposto para UI (mostrar e-mail + botão Sair)
-  window.__currentUserEmail = "";
-  window.__signOut = async () => {
-    await signOut(auth);
-  };
-
-  function mapAuthError(err){
-    const code = err?.code || "";
-    if (code.includes("invalid") || code.includes("wrong-password")) return "E-mail ou senha inválidos.";
-    if (code.includes("user-not-found")) return "Usuário não encontrado.";
-    if (code.includes("email-already-in-use")) return "Este e-mail já está em uso.";
-    if (code.includes("weak-password")) return "Senha fraca. Use pelo menos 6 caracteres.";
-    if (code.includes("too-many-requests")) return "Muitas tentativas. Aguarde e tente novamente.";
-    if (code.includes("network-request-failed")) return "Falha de rede. Verifique sua conexão e tente novamente.";
-    return "Não foi possível autenticar. Verifique os dados e tente novamente.";
-  }
-
-  function renderPending(email){
-    root.innerHTML = `
-      <section class="chooser">
-        <div class="chooserCard">
-          <div class="chooserTop">
-            <h2>Aguardando aprovação</h2>
-            <p>Seu acesso foi criado, mas ainda não foi aprovado pelo administrador.</p>
-            <p style="margin-top:8px"><strong>${email ? email : ""}</strong></p>
-          </div>
-
-          <div class="authActions">
-            <button class="authBtn" id="btnExit" type="button">Sair</button>
-          </div>
-
-          <div class="authMsg">
-            Se precisar de urgência, solicite a liberação ao administrador.
-          </div>
-        </div>
-      </section>
-    `;
-
-    document.getElementById("btnExit").addEventListener("click", async () => {
-      await signOut(auth);
-    });
-  }
-
-  function renderLogin(errorText = ""){
-    root.innerHTML = `
-      <section class="chooser">
-        <div class="chooserCard">
-          <div class="chooserTop">
-            <h2>Acesso restrito</h2>
-            <p>Faça login para visualizar a Lista de Preços Oficiais.</p>
-          </div>
-
-          <div class="authForm">
-            <div class="authRow">
-              <div class="authField">
-                <label for="authEmail">E-mail</label>
-                <input id="authEmail" type="email" placeholder="seuemail@empresa.com" autocomplete="email" />
-              </div>
-              <div class="authField">
-                <label for="authPass">Senha</label>
-                <input id="authPass" type="password" placeholder="••••••••" autocomplete="current-password" />
-              </div>
-            </div>
-
-            <div class="authActions">
-              <button class="authBtn primary" id="btnLogin" type="button">Entrar</button>
-              <button class="authBtn" id="btnSignup" type="button">Criar conta</button>
-              <button class="linkBtn" id="btnReset" type="button">Esqueci minha senha</button>
-            </div>
-
-            ${errorText
-              ? `<div class="authError">${errorText}</div>`
-              : `<div class="authMsg">Se ainda não tiver acesso, crie uma conta. Ela ficará pendente até aprovação do admin.</div>`
-            }
-          </div>
-        </div>
-      </section>
-    `;
-
-    const emailEl = document.getElementById("authEmail");
-    const passEl  = document.getElementById("authPass");
-
-    document.getElementById("btnLogin").addEventListener("click", async () => {
-      const email = (emailEl.value || "").trim();
-      const pass  = (passEl.value || "").trim();
-      try{
-        await signInWithEmailAndPassword(auth, email, pass);
-        // A liberação acontece no onAuthStateChanged (checa active)
-      }catch(e){
-        renderLogin(mapAuthError(e));
-      }
-    });
-
-    document.getElementById("btnSignup").addEventListener("click", async () => {
-      const email = (emailEl.value || "").trim();
-      const pass  = (passEl.value || "").trim();
-      try{
-        const cred = await createUserWithEmailAndPassword(auth, email, pass);
-
-        // Cria o cadastro do usuário como PENDENTE
-        await setDoc(doc(db, "users", cred.user.uid), {
-          email,
-          active: false,
-          role: "user",
-          createdAt: serverTimestamp()
-        }, { merge: true });
-
-        // Mostra pendente e (opcional) desloga na sequência
-        renderPending(email);
-        await signOut(auth);
-
-      }catch(e){
-        renderLogin(mapAuthError(e));
-      }
-    });
-
-    document.getElementById("btnReset").addEventListener("click", async () => {
-      const email = (emailEl.value || "").trim();
-      if (!email){
-        renderLogin("Informe o e-mail para enviar o link de redefinição.");
-        return;
-      }
-      try{
-        await sendPasswordResetEmail(auth, email);
-        renderLogin("Link de redefinição enviado. Verifique seu e-mail.");
-      }catch(e){
-        renderLogin(mapAuthError(e));
-      }
-    });
-  }
-
-  async function ensureUserDoc(user){
-    const ref = doc(db, "users", user.uid);
-    const snap = await getDoc(ref);
-    if (!snap.exists()){
-      // Se o usuário já existia no Auth mas não tem doc ainda, cria como pendente
-      await setDoc(ref, {
-        email: user.email || "",
-        active: false,
-        role: "user",
-        createdAt: serverTimestamp()
-      }, { merge: true });
-      return { active: false, role: "user" };
-    }
-    return snap.data() || {};
-  }
-
-  // Gate: só libera a lista após autenticação + aprovação
-  onAuthStateChanged(auth, async (user) => {
-    if (!user){
-      window.__currentUserEmail = "";
-      renderLogin();
-      return;
-    }
-
-    try{
-      const data = await ensureUserDoc(user);
-      const isActive = data?.active === true;
-
-      if (!isActive){
-        const email = user.email || "";
-        renderPending(email);
-        // opcional: deixar logado e apenas bloquear. Eu recomendo deslogar:
-        await signOut(auth);
-        return;
-      }
-
-      window.__currentUserEmail = user.email || "";
-      window.__bootPricesApp?.();
-
-    }catch(e){
-      // Falha ao validar status → não libera
-      renderLogin("Não foi possível validar seu acesso. Tente novamente.");
-      await signOut(auth);
-    }
-  });
-</script>
 </body>
 </html>
