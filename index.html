@@ -19,6 +19,36 @@
       --headGrad: linear-gradient(#d7dee7, #c8d0da);
       --accent:#2e8b57;
       --accentDeep:#1f5a39;
+
+      /* =========================================
+         🎨 CORES DOS GRUPOS (Esquerda - Produtos)
+         ========================================= */
+      --grp-green-bg: rgba(46, 139, 87, 0.12); 
+      --grp-green-txt: #14532d; 
+      
+      --grp-orange-bg: rgba(234, 88, 12, 0.09);
+      --grp-orange-txt: #9a3412;
+
+      --grp-blue-bg: rgba(43, 116, 199, 0.09);
+      --grp-blue-txt: #1e3a8a;
+
+      --grp-gray-bg: rgba(55, 65, 81, 0.06);
+      --grp-gray-txt: #374151;
+
+      /* =========================================
+         🎨 CORES DAS COLUNAS DE PREÇO (Direita)
+         ========================================= */
+      /* Azul Claro (Over) */
+      --col-over-bg: rgba(43, 116, 199, 0.04); 
+      --col-over-txt: #2b74c7;
+      
+      /* Verde Claro (Base) */
+      --col-base-bg: rgba(46, 139, 87, 0.06);
+      --col-base-txt: #1f5a39;
+      
+      /* Laranja Claro (Reduzido) */
+      --col-red-bg:  rgba(234, 88, 12, 0.04);
+      --col-red-txt: #c2410c;
     }
 
     *{ box-sizing:border-box; }
@@ -325,12 +355,12 @@
       user-select:none;
     }
 
-    /* Table */
+    /* Table Structure */
     .tableWrap{
       border-radius: var(--radiusLG);
       overflow:hidden;
       border:1px solid rgba(0,0,0,.12);
-      background: linear-gradient(#f8f9fb, #eef1f5);
+      background: #ffffff;
       box-shadow: 0 14px 22px rgba(0,0,0,.10);
     }
 
@@ -340,26 +370,64 @@
       position:sticky;
       top:0;
       z-index:2;
-      background: var(--headGrad);
-      color:#2f3944;
+      background: #eef1f5;
+      color:#3d4652;
       text-transform:uppercase;
-      font-size:12px;
+      font-size:11px;
+      font-weight:700;
       letter-spacing:.6px;
-      padding:12px 12px;
-      border-bottom:1px solid rgba(0,0,0,.14);
+      padding:14px 12px;
+      border-bottom:1px solid rgba(0,0,0,.10);
       white-space:nowrap;
     }
 
     tbody td{
       padding:12px 12px;
-      border-bottom:1px solid rgba(0,0,0,.08);
-      background: linear-gradient(#f7f8fa, #eef1f4);
+      border-bottom:1px solid rgba(0,0,0,.06);
       vertical-align:middle;
+      transition: background .2s;
     }
 
-    tbody tr:hover td{ background: linear-gradient(#ffffff, #eef1f4); }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td{ filter: brightness(0.98); }
 
-    .col-item{ width: 42%; }
+    /* ========================================================= */
+    /* 🎨 ESTILIZAÇÃO: CLASSES DE PRODUTO (1ª Coluna)            */
+    /* ========================================================= */
+    
+    td.type-green  { background: var(--grp-green-bg) !important; color: var(--grp-green-txt) !important; }
+    td.type-orange { background: var(--grp-orange-bg) !important; color: var(--grp-orange-txt) !important; }
+    td.type-blue   { background: var(--grp-blue-bg) !important; color: var(--grp-blue-txt) !important; }
+    td.type-gray   { background: var(--grp-gray-bg) !important; color: var(--grp-gray-txt) !important; }
+
+    /* ========================================================= */
+    /* 🎨 ESTILIZAÇÃO: COLUNAS DE PREÇO (Direita)                */
+    /* ========================================================= */
+
+    /* Over (Azul) */
+    table th:nth-child(6), table td:nth-child(6) {
+        background-color: var(--col-over-bg);
+        color: var(--col-over-txt);
+        border-left: 1px solid rgba(255,255,255,0.8);
+    }
+
+    /* Base (Verde) - Destaque sutil */
+    table th:nth-child(7), table td:nth-child(7) {
+        background-color: var(--col-base-bg);
+        color: var(--col-base-txt);
+        border-left: 1px solid rgba(255,255,255,0.8);
+        font-weight: 600;
+    }
+
+    /* Reduzido (Laranja) */
+    table th:nth-child(8), table td:nth-child(8) {
+        background-color: var(--col-red-bg);
+        color: var(--col-red-txt);
+        border-left: 1px solid rgba(255,255,255,0.8);
+    }
+
+
+    .col-item{ width: 40%; }
     .mono{ font-variant-numeric: tabular-nums; }
     .price{ font-weight:600; white-space:nowrap; }
     .muted{ color:var(--muted); }
@@ -374,7 +442,22 @@
       border-radius: 18px;
       box-shadow: var(--shadow2);
       padding:12px;
+      position: relative;
+      overflow: hidden;
     }
+
+    /* Pequena barra colorida no card mobile para indicar o tipo */
+    .pCard::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 5px;
+    }
+    .pCard.card-green::before { background: var(--grp-green-txt); }
+    .pCard.card-orange::before { background: var(--grp-orange-txt); }
+    .pCard.card-blue::before { background: var(--grp-blue-txt); }
+    .pCard.card-gray::before { background: var(--grp-gray-txt); }
+
 
     .pHead{
       display:flex;
@@ -402,7 +485,12 @@
       text-align:center;
     }
 
-    .pLabel{ font-size:11px; color:#3d4652; letter-spacing:.2px; }
+    /* Cores também nos cards mobile (Preço) */
+    .pBox.bx-over { background: var(--col-over-bg); color: var(--col-over-txt); border-color: rgba(43, 116, 199, 0.2); }
+    .pBox.bx-base { background: var(--col-base-bg); color: var(--col-base-txt); border-color: rgba(46, 139, 87, 0.2); font-weight:700; }
+    .pBox.bx-red  { background: var(--col-red-bg);  color: var(--col-red-txt);  border-color: rgba(234, 88, 12, 0.2); }
+
+    .pLabel{ font-size:11px; opacity:0.8; letter-spacing:.2px; margin-bottom:4px; text-transform:uppercase; font-size:10px;}
     .pVal{ margin-top:6px; font-size:14px; font-weight:700; }
 
     /* Specials */
@@ -599,6 +687,28 @@
     function asArray(x){
       return Array.isArray(x) ? x : [];
     }
+
+    // ✅ LÓGICA DE CORES DOS PRODUTOS
+    const getProductType = (name) => {
+      const n = normalize(name).toUpperCase();
+      
+      // 1. MIX (Verde)
+      if (n.includes('AG MIX')) return 'type-green';
+      
+      // 2. LEGUMINOSAS (Laranja/Salmão)
+      // Crotalária, Guandu, Tremoço, Ervilha, Ervilhaca, Estilosantes
+      if (n.includes('CROTALARIA') || n.includes('GUANDU') || n.includes('TREMOCO') || 
+          n.includes('ERVILHA') || n.includes('ESTILOSANTES')) return 'type-orange';
+
+      // 3. GRAMINEAS (Azul/Roxo)
+      // Braquiária, Milheto, Capim, Aveia, Centeio, Coracana
+      if (n.includes('BRAQ') || n.includes('MILHETO') || n.includes('CAPIM') || 
+          n.includes('AVEIA') || n.includes('CENTEIO') || n.includes('CORACANA')) return 'type-blue';
+
+      // 4. OUTROS (Cinza)
+      // Nabo, Rabanete, Crambe, Trigo (e o que sobrar)
+      return 'type-gray';
+    };
 
     const getDataset = () => {
       if (selected === 'consumidor') {
@@ -879,48 +989,62 @@
                 </tr>
               </thead>
               <tbody>
-                ${safeFiltered.map(r => `
-                  <tr>
-                    <td><strong>${escapeHtml(r?.item ?? '')}</strong></td>
-                    <td class="mono">${escapeHtml(r?.kg_ha || '—')}</td>
-                    <td class="mono">${r?.kg_sc ?? '—'}</td>
-                    <td class="mono">${r?.kg_bag ?? '—'}</td>
-                    <td class="price">${fmtBRL(getPrice(r))}</td>
-                    <td class="mono muted">${fmtBRL(r?.preco_over)}</td>
-                    <td class="mono muted">${fmtBRL(r?.preco_base)}</td>
-                    <td class="mono muted">${fmtBRL(r?.preco_reduzido)}</td>
-                  </tr>
-                `).join('')}
+                ${safeFiltered.map(r => {
+                  // Descobre a cor baseado no nome
+                  const typeClass = getProductType(r?.item || '');
+                  return `
+                    <tr>
+                      <td class="${typeClass}"><strong>${escapeHtml(r?.item ?? '')}</strong></td>
+                      <td class="mono">${escapeHtml(r?.kg_ha || '—')}</td>
+                      <td class="mono">${r?.kg_sc ?? '—'}</td>
+                      <td class="mono">${r?.kg_bag ?? '—'}</td>
+                      <td class="price">${fmtBRL(getPrice(r))}</td>
+                      <td class="mono muted">${fmtBRL(r?.preco_over)}</td>
+                      <td class="mono muted">${fmtBRL(r?.preco_base)}</td>
+                      <td class="mono muted">${fmtBRL(r?.preco_reduzido)}</td>
+                    </tr>
+                  `;
+                }).join('')}
               </tbody>
             </table>
           </div>
 
           <div class="cards" aria-label="Cards de preços">
             <div class="cardGrid">
-              ${safeFiltered.map(r => `
-                <div class="pCard">
-                  <div class="pHead">
-                    <div>
-                      <div class="pTitle">${escapeHtml(r?.item ?? '')}</div>
-                      <div class="pMeta">
-                        KG-L/HA: <span class="mono">${escapeHtml(r?.kg_ha || '—')}</span> ·
-                        KG/SC: <span class="mono">${r?.kg_sc ?? '—'}</span> ·
-                        KG/BAG: <span class="mono">${r?.kg_bag ?? '—'}</span>
+              ${safeFiltered.map(r => {
+                 const typeClass = getProductType(r?.item || '');
+                 // Mapeia classe do td para classe do card
+                 let cardClass = '';
+                 if (typeClass.includes('green')) cardClass = 'card-green';
+                 else if (typeClass.includes('orange')) cardClass = 'card-orange';
+                 else if (typeClass.includes('blue')) cardClass = 'card-blue';
+                 else cardClass = 'card-gray';
+                 
+                 return `
+                  <div class="pCard ${cardClass}">
+                    <div class="pHead">
+                      <div>
+                        <div class="pTitle">${escapeHtml(r?.item ?? '')}</div>
+                        <div class="pMeta">
+                          KG-L/HA: <span class="mono">${escapeHtml(r?.kg_ha || '—')}</span> ·
+                          KG/SC: <span class="mono">${r?.kg_sc ?? '—'}</span> ·
+                          KG/BAG: <span class="mono">${r?.kg_bag ?? '—'}</span>
+                        </div>
+                      </div>
+                      <div class="price" style="text-align:right">
+                        ${fmtBRL(getPrice(r))}
+                        <div class="muted" style="font-size:11px; font-weight:500; margin-top:4px">preço selecionado</div>
                       </div>
                     </div>
-                    <div class="price" style="text-align:right">
-                      ${fmtBRL(getPrice(r))}
-                      <div class="muted" style="font-size:11px; font-weight:500; margin-top:4px">preço selecionado</div>
+
+                    <div class="pPrices">
+                      <div class="pBox bx-over"><div class="pLabel">Over</div><div class="pVal">${fmtBRL(r?.preco_over)}</div></div>
+                      <div class="pBox bx-base"><div class="pLabel">Base</div><div class="pVal">${fmtBRL(r?.preco_base)}</div></div>
+                      <div class="pBox bx-red"><div class="pLabel">Reduzido</div><div class="pVal">${fmtBRL(r?.preco_reduzido)}</div></div>
                     </div>
                   </div>
-
-                  <div class="pPrices">
-                    <div class="pBox"><div class="pLabel">Over</div><div class="pVal">${fmtBRL(r?.preco_over)}</div></div>
-                    <div class="pBox"><div class="pLabel">Base</div><div class="pVal">${fmtBRL(r?.preco_base)}</div></div>
-                    <div class="pBox"><div class="pLabel">Reduzido</div><div class="pVal">${fmtBRL(r?.preco_reduzido)}</div></div>
-                  </div>
-                </div>
-              `).join('')}
+                `;
+              }).join('')}
             </div>
           </div>
 
