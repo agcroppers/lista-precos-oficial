@@ -603,9 +603,7 @@
     */
 
     {item:'Crambe — FMS Brilhante',kg_ha:'15',kg_sc:10,kg_bag:'400',preco_over:'7,80',preco_base:'6,60',preco_reduzido:'6,00'},
-    
-    
-    
+  
     {item:'Trigo Mourisco — IPR 91 Baili',kg_ha:'50',kg_sc:15,kg_bag:'750',preco_over:'5,85',preco_base:'5,30',preco_reduzido:'4,70'},
     {item:'Trigo Mourisco — IPR 92 Altar',kg_ha:'50',kg_sc:15,kg_bag:'750',preco_over:'5,85',preco_base:'5,30',preco_reduzido:'4,70'}
   
@@ -942,7 +940,36 @@
       `;
     };
 
-    const renderApp = () => {
+        // ======== Busca (suave) ========
+    let __searchDebounceTimer = null;
+    let __searchIsComposing = false;
+    let __searchPending = '';
+    let __searchCaret = null;
+
+    function __scheduleSearchRender(value, caret){
+      __searchPending = value ?? '';
+      __searchCaret = (typeof caret === 'number') ? caret : null;
+
+      if (__searchDebounceTimer) clearTimeout(__searchDebounceTimer);
+      __searchDebounceTimer = setTimeout(() => {
+        // evita re-render desnecessário
+        if (state.term === __searchPending) return;
+        state.term = __searchPending;
+        renderApp();
+
+        // restaura foco/cursor para não "piscar" enquanto digita
+        try{
+          const s = document.getElementById('search');
+          if (s){
+            s.focus({ preventScroll: true });
+            const pos = (__searchCaret ?? s.value.length);
+            s.setSelectionRange(pos, pos);
+          }
+        }catch(e){}
+      }, 120);
+    }
+
+const renderApp = () => {
       const ds = getDataset();
       if (!ds) return renderChooser();
 
@@ -1099,13 +1126,20 @@
       const tier = document.getElementById('tier');
 
       if (search){
+        search.addEventListener('compositionstart', () => { __searchIsComposing = true; });
+        search.addEventListener('compositionend', (e) => {
+          __searchIsComposing = false;
+          const el = e.target;
+          __scheduleSearchRender(el.value, el.selectionStart);
+        });
+
         search.addEventListener('input', (e) => {
-          state.term = e.target.value;
-          renderApp();
+          if (__searchIsComposing) return;
+          const el = e.target;
+          __scheduleSearchRender(el.value, el.selectionStart);
         });
       }
-
-      if (tier){
+if (tier){
         tier.addEventListener('change', (e) => {
           state.priceTier = e.target.value;
           renderApp();
