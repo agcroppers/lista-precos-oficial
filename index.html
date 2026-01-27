@@ -35,6 +35,10 @@
       --grp-gray-bg: rgba(55, 65, 81, 0.06);
       --grp-gray-txt: #374151;
 
+      /* --- NOVO: LINHA BUDGET (Roxo/Indigo para destaque) --- */
+      --grp-budget-bg: rgba(99, 102, 241, 0.14);
+      --grp-budget-txt: #4338ca;
+
       /* =========================================
          🎨 CORES DAS COLUNAS DE PREÇO (Direita)
          ========================================= */
@@ -399,6 +403,27 @@
     td.type-orange { background: var(--grp-orange-bg) !important; color: var(--grp-orange-txt) !important; }
     td.type-blue   { background: var(--grp-blue-bg) !important; color: var(--grp-blue-txt) !important; }
     td.type-gray   { background: var(--grp-gray-bg) !important; color: var(--grp-gray-txt) !important; }
+    
+    /* NOVA CLASSE BUDGET */
+    td.type-budget { background: var(--grp-budget-bg) !important; color: var(--grp-budget-txt) !important; }
+
+    /* TAG MINIMALISTA */
+    .tag-budget {
+        display: inline-block;
+        font-size: 10px;
+        line-height: 1;
+        padding: 4px 6px;
+        border-radius: 6px;
+        background: rgba(99, 102, 241, 0.15); /* Fundo sutil */
+        color: #4338ca;
+        margin-right: 8px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        vertical-align: middle;
+        border: 1px solid rgba(99, 102, 241, 0.25);
+        transform: translateY(-1px);
+    }
 
     /* ========================================================= */
     /* 🎨 ESTILIZAÇÃO: COLUNAS DE PREÇO (Direita)                */
@@ -457,6 +482,7 @@
     .pCard.card-orange::before { background: var(--grp-orange-txt); }
     .pCard.card-blue::before { background: var(--grp-blue-txt); }
     .pCard.card-gray::before { background: var(--grp-gray-txt); }
+    .pCard.card-budget::before { background: var(--grp-budget-txt); }
 
 
     .pHead{
@@ -747,6 +773,9 @@
     // ✅ LÓGICA DE CORES DOS PRODUTOS
     const getProductType = (name) => {
       const n = normalize(name).toUpperCase();
+
+      // 0. BUDGET (Priority Check - Roxo)
+      if (n.includes('LINHA BUDGET')) return 'type-budget';
       
       // 1. MIX (Verde)
       if (n.includes('AG MIX')) return 'type-green';
@@ -1075,11 +1104,23 @@ const renderApp = () => {
               </thead>
               <tbody>
                 ${safeFiltered.map(r => {
-                  // Descobre a cor baseado no nome
-                  const typeClass = getProductType(r?.item || '');
+                  // 1. Descobre a cor baseado no nome original
+                  const originalName = r?.item || '';
+                  const typeClass = getProductType(originalName);
+                  
+                  // 2. Se for BUDGET, adiciona a tag
+                  const isBudget = typeClass === 'type-budget';
+                  const tagHtml = isBudget ? '<span class="tag-budget">BUDGET</span>' : '';
+
+                  // 3. Se for BUDGET, remove o prefixo "LINHA BUDGET" do texto exibido
+                  let displayName = originalName;
+                  if (isBudget) {
+                     displayName = displayName.replace(/LINHA BUDGET\s*[-–—]?\s*/i, '').trim();
+                  }
+                  
                   return `
                     <tr>
-                      <td class="${typeClass}"><strong>${escapeHtml(r?.item ?? '')}</strong></td>
+                      <td class="${typeClass}"><strong>${tagHtml}${escapeHtml(displayName)}</strong></td>
                       <td class="mono">${escapeHtml(r?.kg_ha || '—')}</td>
                       <td class="mono">${r?.kg_sc ?? '—'}</td>
                       <td class="mono">${r?.kg_bag ?? '—'}</td>
@@ -1097,19 +1138,32 @@ const renderApp = () => {
           <div class="cards" aria-label="Cards de preços">
             <div class="cardGrid">
               ${safeFiltered.map(r => {
-                 const typeClass = getProductType(r?.item || '');
+                 const originalName = r?.item || '';
+                 const typeClass = getProductType(originalName);
+                 
                  // Mapeia classe do td para classe do card
                  let cardClass = '';
                  if (typeClass.includes('green')) cardClass = 'card-green';
                  else if (typeClass.includes('orange')) cardClass = 'card-orange';
                  else if (typeClass.includes('blue')) cardClass = 'card-blue';
+                 else if (typeClass.includes('budget')) cardClass = 'card-budget';
                  else cardClass = 'card-gray';
+                 
+                 // Tag para mobile (opcional, mas bom pra consistência)
+                 const isBudget = typeClass === 'type-budget';
+                 const tagHtml = isBudget ? '<span class="tag-budget" style="margin-bottom:4px; display:inline-block">BUDGET</span><br>' : '';
+
+                 // Ajuste do nome também no mobile
+                 let displayName = originalName;
+                 if (isBudget) {
+                     displayName = displayName.replace(/LINHA BUDGET\s*[-–—]?\s*/i, '').trim();
+                 }
                  
                  return `
                   <div class="pCard ${cardClass}">
                     <div class="pHead">
                       <div>
-                        <div class="pTitle">${escapeHtml(r?.item ?? '')}</div>
+                        <div class="pTitle">${tagHtml}${escapeHtml(displayName)}</div>
                         <div class="pMeta">
                           KG-L/HA: <span class="mono">${escapeHtml(r?.kg_ha || '—')}</span> ·
                           KG/SC: <span class="mono">${r?.kg_sc ?? '—'}</span> ·
