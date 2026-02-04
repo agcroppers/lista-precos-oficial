@@ -82,52 +82,51 @@
     }
 
     .authCard{
-      width: min(560px, 100%);
-      border-radius: var(--radiusXL);
-      background: rgba(255,255,255,.78);
-      border:1px solid rgba(255,255,255,.55);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      width: min(520px, 100%);
+      border-radius: 26px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(0,0,0,.06);
+      box-shadow: 0 20px 45px rgba(0,0,0,.12);
       overflow:hidden;
     }
 
-    .authBrand{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:16px 18px;
-      background: linear-gradient(180deg, var(--accentDeep), var(--accent));
-      color:white;
-      font-weight:700;
-      letter-spacing:.2px;
-      font-size:16px;
+    .authBody{
+      padding: 28px 26px 20px;
     }
 
-    .authBody{
-      padding:20px 20px 18px;
+    .authLogo{
+      display:flex;
+      justify-content:center;
+      margin-bottom: 10px;
+    }
+
+    .authLogo img{
+      height: 42px;
+      width: auto;
+      display:block;
     }
 
     .authTitle{
       margin:0;
-      font-size:22px;
-      font-weight:700;
-      letter-spacing:.2px;
-      color:#13301f;
+      font-size: 28px;
+      font-weight: 750;
+      letter-spacing: .2px;
+      color: #1f5a39;
       text-align:center;
     }
 
     .authSub{
-      margin:8px 0 16px;
-      color:var(--muted);
-      font-size:13px;
+      margin: 6px 0 18px;
+      color: #6b7280;
+      font-size: 13px;
       text-align:center;
-      line-height:1.35;
+      line-height: 1.35;
     }
 
     .authGrid{
       display:grid;
       grid-template-columns: 1fr;
-      gap:10px;
+      gap: 12px;
       margin-top: 6px;
     }
 
@@ -137,75 +136,91 @@
 
     .authField input{
       width:100%;
-      padding:12px 12px 12px 40px;
-      border-radius:14px;
-      border:1px solid rgba(0,0,0,.12);
+      padding: 12px 12px 12px 42px;
+      border-radius: 12px;
+      border: 1px solid rgba(31, 90, 57, .22);
       outline:none;
-      background: rgba(255,255,255,.92);
-      box-shadow: var(--shadow2);
-      font-size:14px;
+      background: #ffffff;
+      font-size: 14px;
+      transition: box-shadow .15s, border-color .15s;
+    }
+
+    .authField input:focus{
+      border-color: rgba(31, 90, 57, .45);
+      box-shadow: 0 0 0 4px rgba(46, 139, 87, .12);
     }
 
     .authField svg{
       position:absolute;
-      left:12px;
+      left: 12px;
       top:50%;
       transform: translateY(-50%);
-      width:18px; height:18px;
-      opacity:.55;
+      width: 18px; height: 18px;
+      opacity: .55;
+      color: #4b5563;
+      pointer-events:none;
     }
 
     .authActions{
       display:grid;
       grid-template-columns: 1fr;
-      gap:10px;
-      margin-top: 10px;
+      gap: 10px;
+      margin-top: 12px;
     }
 
     .authBtn{
       appearance:none;
       border:0;
       cursor:pointer;
-      border-radius:14px;
-      padding:12px 14px;
-      font-weight:700;
-      background: linear-gradient(180deg, #2a7c50, #206140);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 750;
+      background: #1f5a39;
       color:white;
-      box-shadow: 0 12px 18px rgba(0,0,0,.12);
+      box-shadow: 0 14px 22px rgba(31, 90, 57, .24);
+      transition: filter .15s, transform .08s;
     }
 
+    .authBtn:hover{ filter: brightness(1.04); }
     .authBtn:active{ transform: translateY(1px); }
+    .authBtn:disabled{ opacity:.7; cursor:not-allowed; }
 
     .authLinks{
       display:flex;
       justify-content:center;
       gap:14px;
-      margin-top: 6px;
-      font-size:12px;
+      margin-top: 8px;
+      font-size: 12px;
     }
 
     .authLinks a{
-      color:#2b74c7;
+      color: #2b74c7;
       text-decoration:none;
     }
     .authLinks a:hover{ text-decoration:underline; }
 
     .authNote{
-      margin-top: 10px;
-      font-size:11px;
-      color:var(--muted);
+      margin-top: 12px;
+      font-size: 11px;
+      color: #6b7280;
       text-align:center;
     }
 
     .authError{
-      margin-top: 10px;
+      margin-top: 12px;
       background: rgba(220, 38, 38, .08);
       border: 1px solid rgba(220, 38, 38, .20);
       color: #991b1b;
-      border-radius: 14px;
+      border-radius: 12px;
       padding: 10px 12px;
       font-size: 12px;
       display:none;
+    }
+
+    @media (max-width: 480px){
+      .authBody{ padding: 24px 18px 18px; }
+      .authTitle{ font-size: 26px; }
+      .authLogo img{ height: 38px; }
     }
 
     /* Top bar */
@@ -882,10 +897,14 @@
 
     const renderLogin = () => {
       app.innerHTML = `
+        
         <section class="authWrap">
           <div class="authCard">
-            <div class="authBrand">AG Croppers</div>
             <div class="authBody">
+              <div class="authLogo">
+                <img src="https://cdn.jsdelivr.net/gh/agcroppers/lista-precos-oficial/assets/Logo%20Verde%20Liso%20AGC.png" alt="AG Croppers" />
+              </div>
+
               <h2 class="authTitle">Bem-vindo</h2>
               <p class="authSub">Faça login para acessar a Lista de Preços Oficiais.</p>
 
@@ -910,7 +929,7 @@
 
               <div class="authError" id="authError"></div>
 
-              <div class="authNote">APENAS PARA USO INTERNO. PROIBIDO O REENVIO OU COMPARTILHAMENTO.</div>
+              <div class="authNote">Apenas para uso interno. Proibido o reenvio ou compartilhamento.</div>
             </div>
           </div>
         </section>
